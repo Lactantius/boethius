@@ -53,8 +53,7 @@ module DemoProject
     ]
   }
 
-  def initialize_new_project_from hash_data
-    @tex = Tex.new(hash_data)
-  end
+  SINGLE_BOOK_BUILD_FILE = "projects/#{TESTDATA1[:id]}.tex"
+  SINGLE_BOOK_FINAL_PDF = "projects/#{TESTDATA1[:id]}.pdf"
 
 end
