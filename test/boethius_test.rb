@@ -19,7 +19,6 @@ class BoethiusTest < Minitest::Test
   end
 
   def test_makes_new_single_book_tex_file
-    skip
     @tex.generate
     assert File.exist?(SINGLE_BOOK_BUILD_FILE)
     refute File.zero?(SINGLE_BOOK_BUILD_FILE)

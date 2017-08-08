@@ -1,4 +1,5 @@
-require "boethius/version"
+require 'boethius/version'
+require 'boethius/source_gen'
 
 module Boethius
   
