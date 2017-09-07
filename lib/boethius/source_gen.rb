@@ -1,4 +1,5 @@
 require 'boethius/metadata'
+require 'boethius/xmlenv'
 
 module Boethius
 
@@ -18,6 +19,14 @@ module Boethius
       @source.puts BOILERPLATE
       @source.puts ''
       @source.metadata self
+      @source.puts ''
+      @source.xmlenv self
+      @source.puts ''
+      @source.puts '\starttext'
+      @source.puts ''
+      # @source.filenames
+      @source.puts ''
+      @source.puts '\stoptext'
       return @source
     ensure
       @source.close

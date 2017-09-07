@@ -29,4 +29,9 @@ class BoethiusTest < Minitest::Test
     assert @source.include? "singlexmlfile"   
   end
 
+  def test_single_book_build_file_has_title
+    @source = @tex.generate
+    assert @source.include? TESTDATA1[:project_items]
+  end
+
 end
