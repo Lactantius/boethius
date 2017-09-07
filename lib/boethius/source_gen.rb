@@ -16,6 +16,9 @@ module Boethius
       filename = "#{File.join(Boethius::PROJECTDIR, self[:id])}"
       @source = Source.new("#{filename}.tex", "w")
       @source.puts BOILERPLATE
+      @source.puts ''
+      @source.metadata self
+      return @source
     ensure
       @source.close
     end

@@ -24,4 +24,9 @@ class BoethiusTest < Minitest::Test
     refute File.zero?(SINGLE_BOOK_BUILD_FILE)
   end
 
+  def test_single_book_build_file_has_the_book_metadata
+    @source = @tex.generate
+    assert @source.include? "singlexmlfile"   
+  end
+
 end
