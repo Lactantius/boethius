@@ -17,7 +17,7 @@ module DemoProject
           title: "Biography of Bob",
           author: "Bobson",
           location: "biography_of_bob.xml",
-          converter: "BOBSON",
+          converter: BOBSON,
           language: "English",
           pubdate: 1813,
         }

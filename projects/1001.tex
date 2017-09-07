@@ -6,6 +6,14 @@
 
 \title={singlexmlfile}
 
+\startxmlsetups xml:Biography of Bob:*
+  \xmlsetsetup{\xmldocument}{*}{-}
+  \xmlsetsetup{\xmldocument}{stuff|p|div}{xml:Biography of Bob:*}
+  \xmlsetsetup{\xmldocument}{div/head}{xml:Biography of Bob:Biography of Bobsection}
+\stopxmlsetups
+
+\xmlregisterdocumentsetup{Biography of Bob}{xml:Biography of Bob:*}
+
 
 \starttext
 
