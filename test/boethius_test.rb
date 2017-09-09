@@ -32,7 +32,7 @@ class BoethiusTest < Minitest::Test
 
   def test_single_book_build_file_has_book_title
     @source = @tex.generate
-    assert @source.include? TESTDATA1[:project_items].first[:book][:title]
+    assert @source.include? TESTDATA1[:project_items].first[:metadata][:title]
   end
 
 end

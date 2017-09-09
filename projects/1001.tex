@@ -6,14 +6,32 @@
 
 \title={singlexmlfile}
 
-\startxmlsetups xml:Biography of Bob:*
+\startxmlsetups xml:BiographyofBob:*
   \xmlsetsetup{\xmldocument}{*}{-}
-  \xmlsetsetup{\xmldocument}{stuff|p|div}{xml:Biography of Bob:*}
-  \xmlsetsetup{\xmldocument}{div/head}{xml:Biography of Bob:Biography of Bobsection}
+  \xmlsetsetup{\xmldocument}{stuff|p|div}{xml:BiographyofBob:*}
+  \xmlsetsetup{\xmldocument}{div/head}{xml:BiographyofBob:BiographyofBobsection}
 \stopxmlsetups
 
-\xmlregisterdocumentsetup{Biography of Bob}{xml:Biography of Bob:*}
+\xmlregisterdocumentsetup{BiographyofBob}{xml:BiographyofBob:*}
 
+\startxmlsetups{xml:BiographyofBob:stuff}
+  \xmlflush{#1}
+\stopxmlsetups
+
+\definehead[BiographyofBobsection][section]
+\setuphead[BiographyofBobsection][number=yes]
+\startxmlsetups{xml:BiographyofBob:p}
+  \xmlflush{#1}\endgraf
+\stopxmlsetups
+
+\startxmlsetups{xml:BiographyofBob:stuff}
+  \xmlfilter{#1}{/div[match()==1 or match()==4]/all()}
+\stopxmlsetups
+
+\startxmlsetups{xml:BiographyofBob:div}
+  \setupheadnumber[section][\numexpr\xmlmatch{#1}-1\relax]
+  \xmlflush{#1}
+\stopxmlsetups
 
 \starttext
 

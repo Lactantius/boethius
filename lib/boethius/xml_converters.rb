@@ -5,7 +5,10 @@ module Boethius
     flush_nodes: ['stuff'],
     sectioning_nodes: {
       section: {
-        div: 'head'
+        div: {
+          parent: 'stuff',
+          child:  'head',
+        },
       },
     },
     par_nodes: ['p'],

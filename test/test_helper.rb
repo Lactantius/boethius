@@ -12,8 +12,11 @@ module DemoProject
     name: "singlexmlfile",
     project_items: [
       {
+        selections: {
+          section: [1,4],
+        },
         font: "Palatino",
-        book: {
+        metadata: {
           title: "Biography of Bob",
           author: "Bobson",
           location: "biography_of_bob.xml",
