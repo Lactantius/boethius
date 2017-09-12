@@ -6,3 +6,45 @@
 
 \title={singlexmlfile}
 
+\startxmlsetups xml:BiographyofBob:*
+  \xmlsetsetup{\xmldocument}{*}{-}
+  \xmlsetsetup{\xmldocument}{stuff|p|div}{xml:BiographyofBob:*}
+  \xmlsetsetup{\xmldocument}{div/head}{xml:BiographyofBob:BiographyofBobsection}
+\stopxmlsetups
+
+\xmlregisterdocumentsetup{BiographyofBob}{xml:BiographyofBob:*}
+
+\startxmlsetups{xml:BiographyofBob:stuff}
+  \xmlflush{#1}
+\stopxmlsetups
+
+\definehead[BiographyofBobsection][section]
+\setuphead[BiographyofBobsection][number=yes]
+
+\startxmlsetups{xml:BiographyofBob:BiographyofBobsection}
+  \startBiographyofBobsection[
+    title={\xmlflush{#1}}
+    ]
+  \stopBiographyofBobsection
+\stopxmlsetups
+
+\startxmlsetups{xml:BiographyofBob:p}
+  \xmlflush{#1}\endgraf
+\stopxmlsetups
+
+\startxmlsetups{xml:BiographyofBob:stuff}
+  \xmlfilter{#1}{/div[match()==1 or match()==4]/all()}
+\stopxmlsetups
+
+\startxmlsetups{xml:BiographyofBob:div}
+  \setupheadnumber[section][\numexpr\xmlmatch{#1}-1\relax]
+  \xmlflush{#1}
+\stopxmlsetups
+
+
+\starttext
+
+  \xmlprocessfile{BiographyofBob}{biography_of_bob.xml}{}
+  \setupheadnumber[BiographyofBobsection][0]
+
+\stoptext
