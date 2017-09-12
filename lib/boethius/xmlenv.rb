@@ -1,4 +1,5 @@
 require 'boethius/xml_converters'
+require 'boethius/helpers'
 
 module Boethius
 

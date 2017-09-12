@@ -1,6 +1,7 @@
 require 'boethius/metadata'
 require 'boethius/xmlenv'
 require 'boethius/filenames'
+require 'boethius/helpers'
 
 module Boethius
 
