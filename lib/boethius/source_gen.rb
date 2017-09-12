@@ -1,5 +1,6 @@
 require 'boethius/metadata'
 require 'boethius/xmlenv'
+require 'boethius/filenames'
 
 module Boethius
 
@@ -24,7 +25,7 @@ module Boethius
       @source.puts ''
       @source.puts '\starttext'
       @source.puts ''
-      # @source.filenames
+      @source.filenames self
       @source.puts ''
       @source.puts '\stoptext'
       return @source

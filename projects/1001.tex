@@ -20,6 +20,14 @@
 
 \definehead[BiographyofBobsection][section]
 \setuphead[BiographyofBobsection][number=yes]
+
+\startxmlsetups{xml:BiographyofBob:BiographyofBobsection}
+  \startBiographyofBobsection[
+    title={\xmlflush{#1}}
+    ]
+  \stopBiographyofBobsection
+\stopxmlsetups
+
 \startxmlsetups{xml:BiographyofBob:p}
   \xmlflush{#1}\endgraf
 \stopxmlsetups
@@ -33,7 +41,10 @@
   \xmlflush{#1}
 \stopxmlsetups
 
+
 \starttext
 
+  \xmlprocessfile{BiographyofBob}{biography_of_bob.xml}{}
+  \setupheadnumber[BiographyofBobsection][0]
 
 \stoptext
