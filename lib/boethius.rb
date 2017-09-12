@@ -4,8 +4,8 @@ require 'boethius/source_gen'
 module Boethius
  
   if defined? ::Rails
-    dir = ::Rails.root
-  else
+    dir = File.join(::Rails.root, 'app') # Add app to fix the later defs that
+  else                                   # include File.join ..
     # The following code is copied shamelessly from Prawn
     file = __FILE__
     file = File.readlink(file) if File.symlink?(file)
