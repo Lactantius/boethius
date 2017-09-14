@@ -9,7 +9,7 @@ module Boethius
         book = item[:book]
         book_title = context_friendly book[:title]
         file_list << "  \\xmlprocessfile{#{book_title}}" \
-                     "{#{File.join(BOOKDIR, book[:location])}}{}\n"
+                     "{#{File.join(BOOK_DIR, book[:location])}}{}\n"
         file_list << reset_head_numbers(book[:converter][:sectioning_nodes],
                                         book_title)
       end

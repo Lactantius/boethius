@@ -16,7 +16,7 @@ module Boethius
     IN
 
     def generate
-      filename = "#{File.join(Boethius::PROJECTDIR, self[:id].to_s)}"
+      filename = "#{File.join(Boethius::PROJECT_DIR, self[:id].to_s)}"
       @source = Source.new("#{filename}.tex", "w")
       @source.puts BOILERPLATE
       @source.add_space

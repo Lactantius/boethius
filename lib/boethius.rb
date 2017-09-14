@@ -12,10 +12,10 @@ module Boethius
     dir  = File.dirname(file)
   end
 
-  BASEDIR = File.expand_path(File.join(dir, '..'))
-  CONTEXTDIR = File.expand_path(File.join(dir, '..', 'context'))
-  PROJECTDIR = File.expand_path(File.join(dir, '..', 'projects'))
-  BOOKDIR = File.expand_path(File.join(dir, '..', 'books'))
+  BASE_DIR = File.expand_path(File.join(dir, '..'))
+  CONTEXT_DIR = File.expand_path(File.join(dir, '..', 'context'))
+  PROJECT_DIR = File.expand_path(File.join(dir, '..', 'projects'))
+  BOOK_DIR = File.expand_path(File.join(dir, '..', 'books'))
 
   class Tex < Hash
 
@@ -24,7 +24,8 @@ module Boethius
     end
 
     def compile
-      `context --paranoid --nonstopmode #{File.join(PROJECTDIR, self[:id])}.tex`
+      file = File.join(PROJECT_DIR, self[:id])
+      system("context", "--paranoid", "--nonstopmode", "#{file}.tex", "--result=#{file}.pdf")
     end
 
   end

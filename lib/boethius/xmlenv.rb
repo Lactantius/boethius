@@ -35,18 +35,6 @@ module Boethius
         \\xmlregisterdocumentsetup{#{@title}}{xml:#{@title}:*}
 
       IN
-      # lambda do |title, conv|
-      #   self.puts "\\startxmlsetups xml:#{title}:*" # will break
-      #   self.puts "  \\xmlsetsetup{\\xmldocument}{*}{-}"
-      #   self.puts "  \\xmlsetsetup{\\xmldocument}" \
-      #     "{#{simple_xml(conv)}}{xml:#{title}:*}"
-      #   title_nodes(title, conv)
-      #   self.puts "\\stopxmlsetups"
-      #   self.puts ''
-      #   self.puts "\\xmlregisterdocumentsetup{#{title}}" \
-      #     "{xml:#{title}:*}"
-      #   self.puts ''
-      # end.call(@title, book[:converter])
 
       # Puts in the nodes that are simply flushed.
       # Example:
@@ -71,14 +59,6 @@ module Boethius
           IN
         end
       end
-        
-      # lambda do |title, conv|
-      #   conv[:sectioning_nodes].each_pair do |level, nodes|
-      #     self.puts "\\definehead[#{title}#{level}][#{level}]"
-      #     self.puts "\\setuphead[#{title}#{level}][number=yes]"
-      #     add_space
-      #   end
-      # end.call(@title, book[:converter])
 
       # Flushes title nodes
       # Example:
@@ -101,18 +81,6 @@ module Boethius
           IN
         end
       end
-      # lambda do |title, conv|
-      #   conv[:sectioning_nodes].each_pair do |level, nodes|
-      #     self.puts "\\startxmlsetups{xml:#{title}:#{title}#{level}}"
-      #     self.puts "  \\start#{title}#{level}["
-      #     self.puts "    title={\\xmlflush{#1}}"
-      #     self.puts "    ]"
-      #     self.puts "  \\stop#{title}#{level}"
-      #     self.puts "\\stopxmlsetups"
-      #     add_space
-      #   end
-      # end.call(@title, book[:converter])
-
 
       # Puts in standard paragraph nodes
       # Example:
@@ -160,11 +128,6 @@ module Boethius
         array << conv[:par_nodes]
         array << sectioning_nodes(conv)
       end.join('|')
-      # nodes = []
-      # nodes << conv[:flush_nodes]
-      # nodes << conv[:par_nodes]
-      # nodes << sectioning_nodes(conv)
-      # nodes.join('|')
     end
 
     def simple_flush(book_title, node, before_text: nil, after_text: nil)
