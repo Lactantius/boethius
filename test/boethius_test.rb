@@ -30,9 +30,21 @@ class BoethiusTest < Minitest::Test
     assert @source.include? "singlexmlfile"
   end
 
-  def test_single_book_build_file_has_book_title
-    @source = @tex.generate
-    assert @source.include? TESTDATA1[:project_items].first[:metadata][:title]
+  TESTDATA1_FILENAMES = <<~IN 
+    \s\s\\xmlprocessfile{BiographyofBob}{/home/keiser/boethius/books/biography_of_bob.xml}{}
+    \s\s\\setupheadnumber[BiographyofBobsection][0]
+  IN
+
+  def test_filenames_function_returns_correct_filename_and_section_number_resets
+    assert_equal @tex.filenames, TESTDATA1_FILENAMES
+  end
+
+  TESTDATA1_METADATA = <<~IN
+    \\title{singlexmlfile}
+  IN
+
+  def test_metadata_function_returns_correct_formatting
+    assert_equal @tex.metadata, TESTDATA1_METADATA
   end
 
 end

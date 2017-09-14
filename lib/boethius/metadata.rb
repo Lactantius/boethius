@@ -1,14 +1,10 @@
 module Boethius
 
-  class Source < ::File
+  class Tex < Hash
 
-    def metadata tex
-      @title = tex[:name]
-      self.puts "\\title{#{@title}}"
-    end
-
-    def include? str
-      IO.readlines(self).to_s.include? str
+    def metadata
+      @title = self[:name]
+      return "\\title{#{@title}}\n"
     end
 
   end

@@ -2,15 +2,23 @@ require_relative 'helpers'
 
 module Boethius
 
-  class Source < ::File
+  class Tex < Hash
 
-    def filenames tex
-      tex[:project_items].each do |book|
-        file_data = book[:metadata]
-        title = context_friendly file_data[:title]
-        self.puts "  \\xmlprocessfile{#{title}}{#{File.join(BOOKDIR, file_data[:location])}}{}"
-        file_data[:converter][:sectioning_nodes].each_key do |div|
-          self.puts "  \\setupheadnumber[#{title}#{div}][0]"
+    def filenames
+      self[:project_items].each_with_object(String.new) do |item, file_list|
+        book = item[:book]
+        book_title = context_friendly book[:title]
+        file_list << "  \\xmlprocessfile{#{book_title}}" \
+                     "{#{File.join(BOOKDIR, book[:location])}}{}\n"
+        file_list << reset_head_numbers(book[:converter][:sectioning_nodes],
+                                        book_title)
+      end
+    end
+
+    def reset_head_numbers(heads, book_title)
+      String.new.tap do |reset_list|
+        heads.each_key do |div|
+          reset_list << "  \\setupheadnumber[#{book_title}#{div}][0]\n"
         end
       end
     end

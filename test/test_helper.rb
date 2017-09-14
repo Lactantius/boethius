@@ -16,7 +16,7 @@ module DemoProject
           section: [1,4],
         },
         font: "Palatino",
-        metadata: {
+        book: {
           title: "Biography of Bob",
           author: "Bobson",
           location: "biography_of_bob.xml",

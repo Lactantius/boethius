@@ -15,7 +15,7 @@
 \xmlregisterdocumentsetup{BiographyofBob}{xml:BiographyofBob:*}
 
 \startxmlsetups{xml:BiographyofBob:stuff}
-  \xmlflush{#1}
+\xmlflush{#1}
 \stopxmlsetups
 
 \definehead[BiographyofBobsection][section]
@@ -37,7 +37,7 @@
 \stopxmlsetups
 
 \startxmlsetups{xml:BiographyofBob:div}
-  \setupheadnumber[section][\numexpr\xmlmatch{#1}-1\relax]
+\setupheadnumber[section][\numexpr\xmlmatch{#1}-1\relax]
   \xmlflush{#1}
 \stopxmlsetups
 

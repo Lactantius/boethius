@@ -3,12 +3,12 @@ require 'boethius/helpers'
 
 module Boethius
 
-  class Source < ::File
+  class Tex < Hash
 
-    def xmlenv(tex)
-      tex[:project_items].each do |book|
-        self.make_env_for book[:metadata]
-        self.select_sections_from book
+    def xmlenv
+      self[:project_items].each_with_object(String.new) do |item, xml|
+        xml << make_env_for(item[:book])
+        xml << select_sections_from(item)
       end
     end
 
@@ -16,6 +16,7 @@ module Boethius
 
       # Make the book title something usable by ConTeXt
       @title = context_friendly book[:title]
+      @conv  = book[:converter]
 
       # Defines the nodes that will be used in the XML file.
       # Example:
@@ -24,27 +25,36 @@ module Boethius
       #   \xmlsetsetup{#1}{bob|bill|ted}{xml:*} (simple_xml)
       #   \xmlsetsetup{#1}{div/title}{xml:foosection} (title_nodes)
       # \stopxmlsetups
-      lambda do |title, conv|
-        self.puts "\\startxmlsetups xml:#{title}:*" # will break
-        self.puts "  \\xmlsetsetup{\\xmldocument}{*}{-}"
-        self.puts "  \\xmlsetsetup{\\xmldocument}" \
-          "{#{simple_xml(conv)}}{xml:#{title}:*}"
-        title_nodes(title, conv)
-        self.puts "\\stopxmlsetups"
-        self.puts ''
-        self.puts "\\xmlregisterdocumentsetup{#{title}}" \
-          "{xml:#{title}:*}"
-        self.puts ''
-      end.call(@title, book[:converter])
+      nodes_setup = <<~IN
+        \\startxmlsetups xml:#{@title}:*
+        \s\s\\xmlsetsetup{\\xmldocument}{*}{-}
+        \s\s\\xmlsetsetup{\\xmldocument}{#{simple_xml(@conv)}}{xml:#{@title}:*}
+        #{title_nodes(@title, @conv)}
+        \\stopxmlsetups
+
+        \\xmlregisterdocumentsetup{#{@title}}{xml:#{@title}:*}
+
+      IN
+      # lambda do |title, conv|
+      #   self.puts "\\startxmlsetups xml:#{title}:*" # will break
+      #   self.puts "  \\xmlsetsetup{\\xmldocument}{*}{-}"
+      #   self.puts "  \\xmlsetsetup{\\xmldocument}" \
+      #     "{#{simple_xml(conv)}}{xml:#{title}:*}"
+      #   title_nodes(title, conv)
+      #   self.puts "\\stopxmlsetups"
+      #   self.puts ''
+      #   self.puts "\\xmlregisterdocumentsetup{#{title}}" \
+      #     "{xml:#{title}:*}"
+      #   self.puts ''
+      # end.call(@title, book[:converter])
 
       # Puts in the nodes that are simply flushed.
       # Example:
       # \startxmlsetups{xml:foo}
       #   \xmlflush{#1}
       # \stopxmlsetups
-      book[:converter][:flush_nodes].each do |node|
-        simple_flush(@title, node)
-        add_space
+      flushed = @conv[:flush_nodes].each_with_object(String.new) do |node, string|
+        string << simple_flush(@title, node)
       end
 
       # Puts in the sectioning nodes
@@ -52,13 +62,23 @@ module Boethius
       # \definehead[foosection][1]
       # \setuphead[foosection][number=yes]
       # The setuphead part of this will get much more complicated.
-      lambda do |title, conv|
-        conv[:sectioning_nodes].each_pair do |level, nodes|
-          self.puts "\\definehead[#{title}#{level}][#{level}]"
-          self.puts "\\setuphead[#{title}#{level}][number=yes]"
-          add_space
+      section_nodes = String.new.tap do |sections|
+        @conv[:sectioning_nodes].each_pair do |level, nodes|
+          sections << <<~IN
+            \\definehead[#{@title}#{level}][#{level}]
+            \\setuphead[#{@title}#{level}][number=yes]
+
+          IN
         end
-      end.call(@title, book[:converter])
+      end
+        
+      # lambda do |title, conv|
+      #   conv[:sectioning_nodes].each_pair do |level, nodes|
+      #     self.puts "\\definehead[#{title}#{level}][#{level}]"
+      #     self.puts "\\setuphead[#{title}#{level}][number=yes]"
+      #     add_space
+      #   end
+      # end.call(@title, book[:converter])
 
       # Flushes title nodes
       # Example:
@@ -68,17 +88,30 @@ module Boethius
       #                ]
       #   \stopsection
       # \stopxmlsetups
-      lambda do |title, conv|
-        conv[:sectioning_nodes].each_pair do |level, nodes|
-          self.puts "\\startxmlsetups{xml:#{title}:#{title}#{level}}"
-          self.puts "  \\start#{title}#{level}["
-          self.puts "    title={\\xmlflush{#1}}"
-          self.puts "    ]"
-          self.puts "  \\stop#{title}#{level}"
-          self.puts "\\stopxmlsetups"
-          add_space
+      title_setups = String.new.tap do |titles|
+        @conv[:sectioning_nodes].each_pair do |level, _|
+          titles << <<~IN
+            \\startxmlsetups{xml:#{@title}:#{@title}#{level}}
+            \s\s\\start#{@title}#{level}[
+            \s\s\s\stitle={\\xmlflush{#1}}
+            \s\s\s\s]
+            \s\s\\stop#{@title}#{level}
+            \\stopxmlsetups
+
+          IN
         end
-      end.call(@title, book[:converter])
+      end
+      # lambda do |title, conv|
+      #   conv[:sectioning_nodes].each_pair do |level, nodes|
+      #     self.puts "\\startxmlsetups{xml:#{title}:#{title}#{level}}"
+      #     self.puts "  \\start#{title}#{level}["
+      #     self.puts "    title={\\xmlflush{#1}}"
+      #     self.puts "    ]"
+      #     self.puts "  \\stop#{title}#{level}"
+      #     self.puts "\\stopxmlsetups"
+      #     add_space
+      #   end
+      # end.call(@title, book[:converter])
 
 
       # Puts in standard paragraph nodes
@@ -86,59 +119,71 @@ module Boethius
       # \startxmlsetups{xml:foo:p}
       #   \xmlflush{#1}\endgraf
       # \stopxmlsetups
-      book[:converter][:par_nodes].each do |node|
-        simple_flush(@title, node, after_text: '\endgraf')
-        add_space
+      par_nodes = @conv[:par_nodes].each_with_object(String.new) do |node, pars|
+        pars << simple_flush(@title, node, before_text: '  ', after_text: '\endgraf')
       end
+
+      [nodes_setup, flushed, section_nodes, title_setups, par_nodes].join
 
     end
 
     def select_sections_from book
-      @title = context_friendly book[:metadata][:title]
-      book[:metadata][:converter][:sectioning_nodes].each_pair do |level, node|
-        div = node.keys.join
-        if excerpts_specified_for? book, level
-          self.puts "\\startxmlsetups{xml:#{@title}:#{node.values.first[:parent]}}"
-          self.puts "  \\xmlfilter{#1}{/#{div}" \
-                    "[match()==#{keep book, level}]/all()}"
-          self.puts "\\stopxmlsetups"
+      @title = context_friendly book[:book][:title]
+      String.new.tap do |excerpts|
+        book[:book][:converter][:sectioning_nodes].each_pair do |level, node|
+          div = node.keys.join
+          parent_node = node.values.first[:parent]
+          if excerpts_specified_for?(book, level)
+            excerpts << <<~IN
+              \\startxmlsetups{xml:#{@title}:#{parent_node}}
+              \s\s\\xmlfilter{#1}{/#{div}[match()==#{keep book, level}]/all()}
+              \\stopxmlsetups
 
-          add_space
+            IN
 
-          set_head_numbers = "\\setupheadnumber[#{level}]" \
-                             "[\\numexpr\\xmlmatch{#1}-1\\relax]\n  "
-          simple_flush(@title, div, before_text: set_head_numbers)
-        else
-          simple_flush(@title, node.values.first[:parent])
-          add_space
-          simple_flush(@title, div)
+            set_head_numbers = "\\setupheadnumber[#{level}]" \
+                               "[\\numexpr\\xmlmatch{#1}-1\\relax]\n  "
+            excerpts << simple_flush(@title, div, before_text: set_head_numbers)
+          else
+            excerpts << simple_flush(@title, parent_node)
+            excerpts << simple_flush(@title, div)
+          end
         end
-        add_space
       end
     end
 
     private
 
     def simple_xml(conv)
-      nodes = []
-      nodes << conv[:flush_nodes]
-      nodes << conv[:par_nodes]
-      nodes << sectioning_nodes(conv)
-      nodes.join('|')
+      Array.new.tap do |array|
+        array << conv[:flush_nodes]
+        array << conv[:par_nodes]
+        array << sectioning_nodes(conv)
+      end.join('|')
+      # nodes = []
+      # nodes << conv[:flush_nodes]
+      # nodes << conv[:par_nodes]
+      # nodes << sectioning_nodes(conv)
+      # nodes.join('|')
     end
 
     def simple_flush(book_title, node, before_text: nil, after_text: nil)
-      self.puts "\\startxmlsetups{xml:#{book_title}:#{node}}"
-      self.puts "  #{before_text}\\xmlflush{#1}#{after_text}"
-      self.puts "\\stopxmlsetups"
+      <<~IN
+        \\startxmlsetups{xml:#{book_title}:#{node}}
+        #{before_text}\\xmlflush{#1}#{after_text}
+        \\stopxmlsetups
+
+      IN
     end
 
     def title_nodes(title, conv)
     # Goal: \xmlsetsetup{#1}{div/head}{xml:AdventuresofBobsection}
-      conv[:sectioning_nodes].each_pair do |level, nodes|
-        self.puts "  \\xmlsetsetup{\\xmldocument}{" \
-          "#{nodes.keys.join}/#{nodes.values.first[:child]}}" \
-          "{xml:#{title}:#{title}#{level}}"
+      String.new.tap do |title_node|
+        conv[:sectioning_nodes].each_pair do |level, nodes|
+          title_node << "  \\xmlsetsetup{\\xmldocument}{" \
+                        "#{nodes.keys.join}/#{nodes.values.first[:child]}}" \
+                        "{xml:#{title}:#{title}#{level}}"
+        end
       end
     end
 

@@ -19,15 +19,15 @@ module Boethius
       filename = "#{File.join(Boethius::PROJECTDIR, self[:id].to_s)}"
       @source = Source.new("#{filename}.tex", "w")
       @source.puts BOILERPLATE
-      @source.puts ''
-      @source.metadata self
-      @source.puts ''
-      @source.xmlenv self
-      @source.puts ''
+      @source.add_space
+      @source.puts self.metadata
+      @source.add_space
+      @source.puts self.xmlenv
+      @source.add_space
       @source.puts '\starttext'
-      @source.puts ''
-      @source.filenames self
-      @source.puts ''
+      @source.add_space
+      @source.puts self.filenames
+      @source.add_space
       @source.puts '\stoptext'
       return @source
     ensure
