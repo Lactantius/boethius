@@ -4,7 +4,7 @@ module Boethius
 
     def metadata tex
       @title = tex[:name]
-      self.puts "\\title={#{@title}}"
+      self.puts "\\title{#{@title}}"
     end
 
     def include? str

@@ -1,0 +1,34 @@
+<stuff>
+  <div>
+    <head>Some Title</head>
+    <p>
+      Stuff
+    </p>
+    <p>
+      More stuff
+    </p>
+  </div>
+  <div>
+    <head>Delete this</head>
+    <p>
+      Junk
+    </p>
+    <p>
+      More junk
+    </p>
+  </div>
+  <div>
+    <head>And delete this</head>
+    <p>
+      Total garbage
+    </p>
+    <p>
+      No point
+    </p>
+  </div>
+  <div>
+    <head>But keep this</head>
+    <p>Important</p>
+    <p>Also important</p>
+  </div>
+</stuff>
