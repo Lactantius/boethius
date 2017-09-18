@@ -9,10 +9,10 @@ class BoethiusTest < Minitest::Test
   def setup
     @tex = Tex.new(TESTDATA2)
     @tex_file = File.join(PROJECT_DIR, "#{@tex[:id]}.tex")
-    # File.delete @tex_file if File.exist? @tex_file
-    # File.delete @source if @source
+    File.delete @tex_file if File.exist? @tex_file
+    File.delete @source if @source
     @pdf = File.join(PROJECT_DIR, "#{@tex[:id]}.pdf")
-    # File.delete @pdf if File.exist? @pdf
+    File.delete @pdf if File.exist? @pdf
   end
 
   def test_accepts_data_for_double_book
