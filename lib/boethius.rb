@@ -24,7 +24,7 @@ module Boethius
     end
 
     def compile
-      file = File.join(PROJECT_DIR, self[:id])
+      file = File.join(PROJECT_DIR, "#{self[:id].to_s}")
       if docker_compilation?
         docker_compile file
       else

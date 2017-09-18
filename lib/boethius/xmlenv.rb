@@ -91,7 +91,18 @@ module Boethius
         pars << simple_flush(@title, node, before_text: '  ', after_text: '\endgraf')
       end
 
-      [nodes_setup, flushed, section_nodes, title_setups, par_nodes].join
+      # Puts in italic nodes
+      # Example:
+      # \startxmlsetups{xml:foo:i}
+      #   {\em\xmlflush{#1}}
+      # \stopxmlsetups
+      if @conv[:it_nodes]
+        it_nodes = @conv[:it_nodes].each_with_object(String.new) do |node, it|
+          it << simple_flush(@title, node, before_text: '  {\em', after_text: '}')
+        end
+      end
+
+      [nodes_setup, flushed, section_nodes, title_setups, par_nodes, it_nodes].join
 
     end
 
@@ -126,6 +137,7 @@ module Boethius
       Array.new.tap do |array|
         array << conv[:flush_nodes]
         array << conv[:par_nodes]
+        array << conv[:it_nodes]
         array << sectioning_nodes(conv)
       end.join('|')
     end
