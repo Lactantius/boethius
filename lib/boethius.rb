@@ -25,7 +25,22 @@ module Boethius
 
     def compile
       file = File.join(PROJECT_DIR, self[:id])
+      if docker_compilation?
+        docker_compile file
+      else
+        bash_compile file
+      end
+    end
+
+    def docker_compilation?
+      false
+    end
+
+    def bash_compile(file)
       system("context", "--paranoid", "--nonstopmode", "#{file}.tex", "--result=#{file}.pdf")
+    end
+
+    def docker_compile(file)
     end
 
   end
