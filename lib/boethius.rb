@@ -1,5 +1,6 @@
 require 'boethius/version'
 require 'boethius/source_gen'
+require 'fileutils'
 
 module Boethius
 
@@ -24,11 +25,12 @@ module Boethius
     end
 
     def compile
-      file = File.join(PROJECT_DIR, "#{self[:id].to_s}")
+      filename = self[:id].to_s
+      filepath = File.join(PROJECT_DIR, filename)
       if docker_compilation?
-        docker_compile file
+        docker_compile filename
       else
-        bash_compile file
+        bash_compile filepath
       end
     end
 
@@ -41,6 +43,10 @@ module Boethius
     end
 
     def docker_compile(file)
+      system("docker", "volume", "create", "#{file}")
+      system("docker", "run", "-v", "#{File.join(PROJECT_DIR, file}:/mnt", "context", "--paranoid", "--nonstopmode", "#{file}.tex", "--result=#{file}.pdf")
+      FileUtils.cp(File.join(PROJECT_DIR, file, "#{file}.pdf"), "#{File.join(PROJECT_DIR, file)}")
+      system("docker", "volume", "rm", "#{file}")
     end
 
   end

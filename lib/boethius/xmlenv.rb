@@ -41,9 +41,7 @@ module Boethius
       # \startxmlsetups{xml:foo}
       #   \xmlflush{#1}
       # \stopxmlsetups
-      flushed = @conv[:flush_nodes].each_with_object(String.new) do |node, string|
-        string << simple_flush(@title, node)
-      end
+      flushed = @conv[:flush_nodes].map { |node| simple_flush(@title, node) }
 
       # Puts in the sectioning nodes
       # Example:
@@ -87,8 +85,8 @@ module Boethius
       # \startxmlsetups{xml:foo:p}
       #   \xmlflush{#1}\endgraf
       # \stopxmlsetups
-      par_nodes = @conv[:par_nodes].each_with_object(String.new) do |node, pars|
-        pars << simple_flush(@title, node, before_text: '  ', after_text: '\endgraf')
+      par_nodes = @conv[:par_nodes].map do |node|
+        simple_flush(@title, node, before_text: '  ', after_text: '\endgraf')
       end
 
       # Puts in italic nodes
@@ -97,8 +95,8 @@ module Boethius
       #   {\em\xmlflush{#1}}
       # \stopxmlsetups
       if @conv[:it_nodes]
-        it_nodes = @conv[:it_nodes].each_with_object(String.new) do |node, it|
-          it << simple_flush(@title, node, before_text: '  {\em', after_text: '}')
+        it_nodes = @conv[:it_nodes].map do |node|
+          simple_flush(@title, node, before_text: '  {\em', after_text: '}')
         end
       end
 
@@ -134,12 +132,8 @@ module Boethius
     private
 
     def simple_xml(conv)
-      Array.new.tap do |array|
-        array << conv[:flush_nodes]
-        array << conv[:par_nodes]
-        array << conv[:it_nodes]
-        array << sectioning_nodes(conv)
-      end.join('|')
+      nodes = [sectioning_nodes(conv), conv[:flush_nodes], conv[:par_nodes], conv[:it_nodes]]
+      nodes.join('|')
     end
 
     def simple_flush(book_title, node, before_text: nil, after_text: nil)
