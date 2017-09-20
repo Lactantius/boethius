@@ -44,7 +44,7 @@ module Boethius
 
     def docker_compile(file)
       system("docker", "volume", "create", "#{file}")
-      system("docker", "run", "-v", "#{File.join(PROJECT_DIR, file}:/mnt", "context", "--paranoid", "--nonstopmode", "#{file}.tex", "--result=#{file}.pdf")
+      system("docker", "run", "-v", "#{File.join(PROJECT_DIR, file)}:/mnt", "context", "--paranoid", "--nonstopmode", "#{file}.tex", "--result=#{file}.pdf")
       FileUtils.cp(File.join(PROJECT_DIR, file, "#{file}.pdf"), "#{File.join(PROJECT_DIR, file)}")
       system("docker", "volume", "rm", "#{file}")
     end
