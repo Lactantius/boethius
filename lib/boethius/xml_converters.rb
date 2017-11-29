@@ -15,11 +15,11 @@ module Boethius
   }
 
   HTML_H2_TITLES = {
-    flush_nodes: ['html', 'body'],
+    flush_nodes: ['article'],
     sectioning_nodes: {
       section: {
-        div: {
-          parent: 'body',
+        section: {
+          parent: 'article',
           child: 'h2',
         },
       },
