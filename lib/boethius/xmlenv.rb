@@ -16,7 +16,7 @@ module Boethius
 
       # Make the book title something usable by ConTeXt
       @title = context_friendly book[:title]
-      @conv  = book[:converter]
+      @conv  = Boethius.const_get(book[:converter])
 
       # Defines the nodes that will be used in the XML file.
       # Example:
@@ -107,24 +107,26 @@ module Boethius
     def select_sections_from book
       @title = context_friendly book[:book][:title]
       String.new.tap do |excerpts|
-        book[:book][:converter][:sectioning_nodes].each_pair do |level, node|
+        # book[:book][:converter][:sectioning_nodes].each_pair do |level, node|
+        @conv[:sectioning_nodes].each_pair do |level, node|
           div = node.keys.join
           parent_node = node.values.first[:parent]
-          if excerpts_specified_for?(book, level)
-            excerpts << <<~IN
-              \\startxmlsetups{xml:#{@title}:#{parent_node}}
-              \s\s\\xmlfilter{#1}{/#{div}[match()==#{keep book, level}]/all()}
-              \\stopxmlsetups
+          # For anthologizing.
+          # if excerpts_specified_for?(book, level)
+          #   excerpts << <<~IN
+          #     \\startxmlsetups{xml:#{@title}:#{parent_node}}
+          #     \s\s\\xmlfilter{#1}{/#{div}[match()==#{keep book, level}]/all()}
+          #     \\stopxmlsetups
 
-            IN
+          #   IN
 
-            set_head_numbers = "\\setupheadnumber[#{level}]" \
-                               "[\\numexpr\\xmlmatch{#1}-1\\relax]\n  "
-            excerpts << simple_flush(@title, div, before_text: set_head_numbers)
-          else
-            excerpts << simple_flush(@title, parent_node)
-            excerpts << simple_flush(@title, div)
-          end
+          #   set_head_numbers = "\\setupheadnumber[#{level}]" \
+          #                      "[\\numexpr\\xmlmatch{#1}-1\\relax]\n  "
+          #   excerpts << simple_flush(@title, div, before_text: set_head_numbers)
+          # else
+          excerpts << simple_flush(@title, parent_node)
+          excerpts << simple_flush(@title, div)
+          # end
         end
       end
     end
@@ -164,9 +166,10 @@ module Boethius
       book[:selections][:"#{section_level}"].join(' or match()==')
     end
 
-    def excerpts_specified_for?(project_item, converter_section)
-      project_item[:selections].keys.join.include? converter_section.to_s
-    end
+    # Maybe do something with this later.
+    # def excerpts_specified_for?(project_item, converter_section)
+    #   project_item[:selections].keys.join.include? converter_section.to_s
+    # end
 
   end
 
