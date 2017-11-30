@@ -105,7 +105,6 @@ module Boethius
     end
 
     def select_sections_from book
-      @title = context_friendly book[:book][:title]
       String.new.tap do |excerpts|
         # book[:book][:converter][:sectioning_nodes].each_pair do |level, node|
         @conv[:sectioning_nodes].each_pair do |level, node|

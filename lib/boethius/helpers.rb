@@ -4,7 +4,7 @@ module Boethius
 
     def context_friendly(title)
       # This will need much more work
-      title.delete(' ')
+      title.gsub(/[^0-9A-Za-z\-]/, '')
     end
 
   end
