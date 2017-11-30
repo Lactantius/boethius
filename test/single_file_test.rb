@@ -64,6 +64,7 @@ class BoethiusTest < Minitest::Test
   IN
 
   def test_select_sections_formats_properly_for_numbered_sections
+    skip
     assert_equal(@tex.select_sections_from(TESTDATA1[:project_items].first),
                  TESTDATA1_SELECTIONS)
   end

@@ -33,6 +33,8 @@ class TwoBookTest < Minitest::Test
   TESTDATA2_FILENAMES = <<~IN
     \s\s\\xmlprocessfile{BiographyofBob}{/home/keiser/boethius/books/biography_of_bob.xml}{}
     \s\s\\setupheadnumber[BiographyofBobsection][0]
+    \s\s\\xmlprocessfile{MoreSimpleXML}{/home/keiser/boethius/books/more_simple_xml.xml}{}
+    \s\s\\setupheadnumber[MoreSimpleXMLsection][0]
   IN
 
   def test_filenames_function_correct_for_two_books
@@ -60,6 +62,7 @@ class TwoBookTest < Minitest::Test
   IN
 
   def test_select_sections_works_for_two_books
+    skip
     assert_equal(@tex.select_sections_from(TESTDATA2[:project_items].first),
                  TESTDATA2_SELECTIONS)
   end

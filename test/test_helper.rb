@@ -20,7 +20,7 @@ module DemoProject
           title: "Biography of Bob",
           author: "Bobson",
           location: "biography_of_bob.xml",
-          converter: Boethius::BOBSON,
+          converter: "BOBSON",
           language: "English",
           pubdate: 1813,
         }
@@ -33,28 +33,28 @@ module DemoProject
     name: "twoxmlfile",
     project_items: [
       {
-        selections: {
-          section: [1,4],
-        },
+        # selections: {
+        #   section: [1,4],
+        # },
         font: "Palatino",
         book: {
           title: "Biography of Bob",
           author: "Bobson",
           location: "biography_of_bob.xml",
-          converter: Boethius::BOBSON,
+          converter: "BOBSON",
           language: "English",
           pubdate: 1813,
         }
       }, {
-        selections: {
-          section: [1,2,4],
-        },
+        # selections: {
+        #   section: [1,2,4],
+        # },
         font: "Gentium",
         book: {
           title: "More Simple XML",
           author: "Bob III",
           location: "more_simple_xml.xml",
-          converter: Boethius::BOBSON,
+          converter: "BOBSON",
           language: "Latin",
           pubdate: 2500,
         }
