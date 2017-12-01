@@ -2,6 +2,7 @@ require 'boethius/metadata'
 require 'boethius/xmlenv'
 require 'boethius/filenames'
 require 'boethius/helpers'
+require 'boethius/formatting'
 
 module Boethius
 
@@ -23,6 +24,8 @@ module Boethius
       @source.puts self.metadata
       @source.add_space
       @source.puts self.xmlenv
+      @source.add_space
+      @source.puts self.formatting
       @source.add_space
       @source.puts '\starttext'
       @source.add_space
