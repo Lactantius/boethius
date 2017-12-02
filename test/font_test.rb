@@ -6,7 +6,7 @@ class FontTest < Minitest::Test
   include DemoProject
   include Boethius
 
-  # This ways seems pretty lame.
+  # This way seems pretty lame.
   PALATINO_BOOK = {
     id: "1101",
     name: "Palatino Test",
@@ -61,15 +61,6 @@ class FontTest < Minitest::Test
     ]
   }
 
-  def make_pdf_of book
-    @tex = Tex.new(book)
-    @tex_file = File.join(PROJECT_DIR, "#{@tex[:id]}.tex")
-    @pdf = Pathname.new(File.join(PROJECT_DIR, "#{@tex[:id]}.pdf"))
-    File.delete @pdf if File.exist? @pdf
-    @tex.generate
-    @tex.compile
-  end
-
   def test_palatino_book
     make_pdf_of PALATINO_BOOK
     assert @pdf.include_font? "TeXGyrePagella"
@@ -83,15 +74,6 @@ class FontTest < Minitest::Test
   def test_libertine_book
     make_pdf_of LIBERTINE_BOOK
     assert @pdf.include_font? "Libertine"
-  end
-
-  class Pathname < ::Pathname
-
-    def include_font? name
-      text = PDF::Inspector::Text.analyze(File.open(self, 'r'))
-      text.font_settings.any? { |setting| setting[:name].to_s.include? name }
-    end
-
   end
 
 end

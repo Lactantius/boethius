@@ -68,4 +68,27 @@ module DemoProject
   DOUBLE_BOOK_BUILD_FILE = "projects/#{TESTDATA2[:id]}.tex"
   DOUBLE_BOOK_FINAL_PDF = "projects/#{TESTDATA2[:id]}.pdf"
 
+  def make_pdf_of book
+    @tex = Tex.new(book)
+    @tex_file = File.join(PROJECT_DIR, "#{@tex[:id]}.tex")
+    @pdf = Pathname.new(File.join(PROJECT_DIR, "#{@tex[:id]}.pdf"))
+    File.delete @pdf if File.exist? @pdf
+    @tex.generate
+    @tex.compile
+  end
+
+  class Pathname < ::Pathname
+
+    def include_font? name
+      text = PDF::Inspector::Text.analyze(File.open(self, 'r'))
+      text.font_settings.any? { |setting| setting[:name].to_s.include? name }
+    end
+
+    def page_size? dimensions
+      file = PDF::Inspector::Page.analyze(File.open(self, 'r'))
+      file.pages.first[:size] == dimensions
+    end
+
+  end
+
 end
