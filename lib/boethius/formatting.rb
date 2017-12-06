@@ -4,8 +4,10 @@ module Boethius
 
     def formatting
       format = String.new(universal_formatting)
+      format << define_page_size_for(self[:page_size])
       self[:project_items].each do |item|
         format << define_font_for(item[:font])
+        format << define_page_size_for(item[:page_size])
       end
       format
     end
@@ -34,6 +36,14 @@ module Boethius
       #     \\setupbodyfont[garamond, 10pt]
       #   IN
       # end
+    end
+
+    def define_page_size_for page_size
+      page_size_definition = case page_size
+        when "letter" then LETTER
+        when "a4" then A4
+        else ''
+      end
     end
 
     PALATINO = <<~IN
@@ -108,6 +118,16 @@ module Boethius
 
       \\usetypescript[linuxlibertine]
       \\setupbodyfont[linuxlibertine,10pt]
+    IN
+
+    LETTER = <<~IN
+      \\definepapersize[letter][width=8.5in,height=11in]
+      \\setuppapersize[letter][letter,portrait]
+    IN
+
+    A4 = <<~IN
+      \\definepapersize[a4][width=210mm,height=297mm]
+      \\setuppapersize[a4][a4,portrait]
     IN
 
   end

@@ -46,7 +46,7 @@ class SizeTest < Minitest::Test
 
   def test_letter_size_book
     make_pdf_of LETTER_SIZE_BOOK
-    assert @pdf.page_size? [612, 792]
+    assert @pdf.page_size? [612, 791.99999]
   end
 
   def test_a4_size_book
