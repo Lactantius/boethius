@@ -43,7 +43,7 @@ module Boethius
     def define_page_size_for page_size
       dimensions = case page_size
 
-        # American sizes
+        # Traditional and American sizes
         when "letter" then ["8.5in", "11in"]
         when "folio"  then ["12in",  "19in"]
         when "quarto" then ["9.5in", "12in"]
@@ -55,7 +55,10 @@ module Boethius
         when "64mo"   then ["2in",   "3in"]
 
         # A Series
+        when "a3" then ["297mm", "410mm"]
         when "a4" then ["210mm", "297mm"]
+        when "a5" then ["148mm", "210mm"]
+        when "a6" then ["105mm", "148mm"]
 
       end
       return <<-IN
