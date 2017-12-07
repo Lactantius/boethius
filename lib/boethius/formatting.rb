@@ -4,10 +4,12 @@ module Boethius
 
     def formatting
       format = String.new(universal_formatting)
-      format << define_page_size_for(self[:page_size])
+      if self[:page_size].is_a? String
+        format << define_page_size_for(self[:page_size])
+      end
       self[:project_items].each do |item|
         format << define_font_for(item[:font])
-        format << define_page_size_for(item[:page_size])
+        # format << define_page_size_for(item[:page_size])
       end
       format
     end
@@ -39,11 +41,32 @@ module Boethius
     end
 
     def define_page_size_for page_size
-      page_size_definition = case page_size
-        when "letter" then LETTER
-        when "a4" then A4
-        else ''
+      dimensions = case page_size
+
+        # American sizes
+        when "letter" then ["8.5in", "11in"]
+        when "folio"  then ["12in",  "19in"]
+        when "quarto" then ["9.5in", "12in"]
+        when "octavo" then ["6in",   "9in"]
+        when "12mo"   then ["5in",   "7.375in"]
+        when "16mo"   then ["4in",   "6.75in"]
+        when "18mo"   then ["4in",   "6.5in"]
+        when "32mo"   then ["3.5in", "5.5in"]
+        when "64mo"   then ["2in",   "3in"]
+
+        # A Series
+        when "a4" then ["210mm", "297mm"]
+
       end
+      return <<-IN
+\\definepapersize[#{page_size}][width=#{dimensions[0]},height=#{dimensions[1]}]
+\\setuppapersize[#{page_size}][#{page_size},portrait]
+      IN
+      # page_size_definition = case page_size
+      #   when "letter" then LETTER
+      #   when "a4" then A4
+      #   else ''
+      # end
     end
 
     PALATINO = <<~IN
@@ -120,15 +143,16 @@ module Boethius
       \\setupbodyfont[linuxlibertine,10pt]
     IN
 
-    LETTER = <<~IN
-      \\definepapersize[letter][width=8.5in,height=11in]
-      \\setuppapersize[letter][letter,portrait]
-    IN
+    # LETTER = <<~IN
+    #   \\definepapersize[letter][width=8.5in,height=11in]
+    #   \\setuppapersize[letter][letter,portrait]
+    # IN
 
-    A4 = <<~IN
-      \\definepapersize[a4][width=210mm,height=297mm]
-      \\setuppapersize[a4][a4,portrait]
-    IN
+    # A4 = <<~IN
+    #   \\definepapersize[a4][width=210mm,height=297mm]
+    #   \\setuppapersize[a4][a4,portrait]
+    # IN
+
 
   end
 
