@@ -1,4 +1,4 @@
-require 'boethius/metadata'
+# require 'boethius/metadata'
 require 'boethius/xmlenv'
 require 'boethius/filenames'
 require 'boethius/helpers'
@@ -21,8 +21,8 @@ module Boethius
       @source = Source.new("#{filename}.tex", "w")
       @source.puts BOILERPLATE
       @source.add_space
-      @source.puts self.metadata
-      @source.add_space
+      # @source.puts self.metadata
+      # @source.add_space
       @source.puts self.xmlenv
       @source.add_space
       @source.puts self.formatting
@@ -30,7 +30,6 @@ module Boethius
       @source.puts '\starttext'
       @source.add_space
       @source.puts self.filenames
-      @source.add_space
       @source.puts '\stoptext'
       return @source
     ensure

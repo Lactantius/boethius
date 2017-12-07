@@ -7,7 +7,7 @@ module Boethius
       if self[:page_size].is_a? String
         format << define_page_size_for(self[:page_size])
       end
-      if self[:margins][:top] != nil
+      if self[:margins][:top] != nil # Why do I have to go to a second layer?
         format << define_layout_for(self[:margins])
       end
       self[:project_items].each do |item|
@@ -18,12 +18,26 @@ module Boethius
     end
 
     def universal_formatting
-      <<~IN
-        \\setupbodyfontenvironment[default][em=sc]
-        \\definefontfeature[default][default][protrusion=quality,liga=yes,clig=yes,calt=yes,kern=yes,expansion=quality,mode=node,trep=yes,script=latn,onum=yes,dlig=yes,hist=yes,jalt=yes,clig=yes]
-        \\setupalign [hanging,hz]
-        \\setuptolerance[{horizontal,strict,stretch}] % To fix overfills
-        \\setuphyphenmark[sign=‑]
+      <<-IN
+\\setupbodyfontenvironment[default][em=sc]
+\\definefontfeature[default][default][protrusion=quality,
+                                      liga=yes,
+                                      clig=yes,
+                                      calt=yes,
+                                      kern=yes,
+                                      expansion=quality,
+                                      mode=node,
+                                      trep=yes,
+                                      script=latn,
+                                      onum=yes,
+                                      dlig=yes,
+                                      hist=yes,
+                                      jalt=yes,
+                                      clig=yes]
+\\setupalign [hanging,hz]
+\\setuptolerance[{horizontal,strict,stretch}] % To fix overfills
+\\setuphyphenmark[sign=‑]
+
       IN
     end
 
