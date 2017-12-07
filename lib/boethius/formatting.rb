@@ -7,6 +7,9 @@ module Boethius
       if self[:page_size].is_a? String
         format << define_page_size_for(self[:page_size])
       end
+      if self[:margins][:top] != nil
+        format << define_layout_for(self[:margins])
+      end
       self[:project_items].each do |item|
         format << define_font_for(item[:font])
         # format << define_page_size_for(item[:page_size])
@@ -65,11 +68,18 @@ module Boethius
 \\definepapersize[#{page_size}][width=#{dimensions[0]},height=#{dimensions[1]}]
 \\setuppapersize[#{page_size}][#{page_size},portrait]
       IN
-      # page_size_definition = case page_size
-      #   when "letter" then LETTER
-      #   when "a4" then A4
-      #   else ''
-      # end
+    end
+
+    def define_layout_for margins
+      <<-IN
+\\definelayout[main]
+  [topspace=#{margins[:top]},
+   backspace=#{margins[:inner]},
+   height=\\dimexpr\\paperheight-\\topspace-#{margins[:bottom]}\\relax,
+   width=\\dimexpr\\paperwidth-\\backspace-#{margins[:outer]}\\relax]
+
+\\setuplayout[main]
+      IN
     end
 
     PALATINO = <<~IN
