@@ -77,11 +77,15 @@ module DemoProject
     @tex.compile
   end
 
+  def modify_base_data(hash)
+    new_hash = Hash[DemoProject::TESTDATA1].merge(hash)
+  end
+
   def setup_font(id, name, font)
     data_diff = { id: id, name: name }
     book_settings = Hash[DemoProject::TESTDATA1].merge(data_diff)
     book_settings[:project_items].first[:font] = font
-    return book_settings
+    book_settings
   end
 
   class Pathname < ::Pathname
