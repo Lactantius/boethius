@@ -77,6 +77,13 @@ module DemoProject
     @tex.compile
   end
 
+  def setup_font(id, name, font)
+    data_diff = { id: id, name: name }
+    book_settings = Hash[DemoProject::TESTDATA1].merge(data_diff)
+    book_settings[:project_items].first[:font] = font
+    return book_settings
+  end
+
   class Pathname < ::Pathname
 
     def include_font? name
