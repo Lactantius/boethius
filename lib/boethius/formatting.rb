@@ -58,7 +58,7 @@ module Boethius
     end
 
     def define_page_size_for page_size
-      dimensions = case page_size
+      dimensions = case page_size.downcase
 
         # Traditional and American sizes
         when "letter" then ["8.5in", "11in"]
