@@ -8,8 +8,9 @@ module Boethius
       self[:project_items].each_with_object(String.new) do |item, file_list|
         book = item[:book]
         book_title = context_friendly book[:title]
+        file_list << title_page_of(book)
         file_list << "  \\starttitle[title={#{book[:title]}}]\n"
-        file_list << "    #{book[:author]}"
+        # file_list << "    #{book[:author]}"
         file_list << "    \\xmlprocessfile{#{book_title}}" \
                      "{#{File.join(BOOK_DIR, book[:location])}}{}\n"
         file_list << reset_head_numbers(Boethius.const_get(book[:converter])[:sectioning_nodes],
@@ -24,6 +25,17 @@ module Boethius
           reset_list << "    \\setupheadnumber[#{book_title}#{div}][0]\n"
         end
       end
+    end
+
+    def title_page_of book
+      <<-IN
+\\startstandardmakeup
+\\blank
+#{book[:title]}
+\\blank
+#{book[:author]}
+\\stopstandardmakeup
+      IN
     end
 
   end

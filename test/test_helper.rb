@@ -15,7 +15,7 @@ module DemoProject
         selections: {
           section: [1,4],
         },
-        font: "Libertine",
+        font: "Palatino",
         book: {
           title: "Biography of Bob",
           author: "Bobson",
