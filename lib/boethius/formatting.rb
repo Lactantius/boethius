@@ -1,3 +1,5 @@
+require_relative 'titlepage'
+
 module Boethius
 
   class Tex < Hash
@@ -37,6 +39,8 @@ module Boethius
 \\setupalign [hanging,hz]
 \\setuptolerance[{horizontal,strict,stretch}] % To fix overfills
 \\setuphyphenmark[sign=‑]
+
+#{title_page_setups}
 
       IN
     end
