@@ -31,12 +31,6 @@ module Boethius
         docker_compile filename
       else
         bash_compile filepath
-        # Clunky workaround since ConTeXt is now ignoring --result
-        if File.exist?(File.join(BASE_DIR, "#{filename}.pdf"))
-          system("mv", "#{File.join(BASE_DIR, filename)}.pdf", "projects/")
-          system("mv", "#{File.join(BASE_DIR, filename)}.log", "projects/")
-          system("mv", "#{File.join(BASE_DIR, filename)}.tuc", "projects/")
-        end
       end
     end
 
@@ -45,7 +39,7 @@ module Boethius
     end
 
     def bash_compile(file)
-      system("context", "--paranoid", "--nonstopmode", "#{file}.tex", "--result=#{file}.pdf")
+      system("mtxrun", "--path=#{PROJECT_DIR}", "--script", "context", "--paranoid", "--nonstopmode", "#{file}.tex")
     end
 
     def docker_compile(file)
