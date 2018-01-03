@@ -81,6 +81,13 @@ module DemoProject
     new_hash = Hash[DemoProject::TESTDATA1].merge(hash)
   end
 
+  def modify_project_item_data(original, hash, item_index)
+    new_item = Hash[original][:project_items][item_index].merge(hash)
+    new_hash = Hash[original]
+    new_hash[:project_items][item_index] = new_item
+    new_hash
+  end
+
   def setup_font(id, name, font)
     data_diff = { id: id, name: name }
     book_settings = Hash[DemoProject::TESTDATA1].merge(data_diff)

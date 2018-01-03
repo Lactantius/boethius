@@ -13,11 +13,11 @@ module Boethius
       if self[:margins][:top] != nil # Why do I have to go to a second layer?
         format << define_layout_for(self[:margins])
       end
-      unless self[:header_data].nil?
-        format << header_texts(self[:header_data], self[:project_items].first[:book])
-      end
       self[:project_items].each do |item|
         format << define_font_for(item[:font])
+        unless item[:header_data].nil?
+          format << header_texts(item[:header_data], item[:book])
+        end
         # format << define_page_size_for(item[:page_size])
       end
       format
