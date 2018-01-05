@@ -21,7 +21,6 @@ class HeaderTextsTest < Minitest::Test
     all_header_texts = modify_project_item_data(new_project_data,
                                                 header_texts_data, 0)
     make_pdf_of all_header_texts
-    puts all_header_texts
     assert File.exist? @pdf
 
   end

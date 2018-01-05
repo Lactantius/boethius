@@ -1,5 +1,6 @@
 require_relative 'titlepage'
-require_relative 'running_header.rb'
+require_relative 'running_header'
+require_relative 'page_numbering'
 
 module Boethius
 
@@ -17,6 +18,9 @@ module Boethius
         format << define_font_for(item[:font])
         unless item[:header_data].nil?
           format << header_texts(item[:header_data], item[:book])
+        end
+        unless item[:page_numbering].nil?
+          format << page_numbering(item[:page_numbering])
         end
         # format << define_page_size_for(item[:page_size])
       end
