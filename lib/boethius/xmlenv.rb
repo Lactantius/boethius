@@ -5,6 +5,8 @@ module Boethius
 
   class Tex < Hash
 
+    attr_accessor :conv
+    
     def xmlenv
       self[:project_items].each_with_object(String.new) do |item, xml|
         xml << make_env_for(item[:book])
@@ -12,11 +14,21 @@ module Boethius
       end
     end
 
+    def init_book_title(book)
+      @title = context_friendly(book[:title])
+    end
+
+    def init_book_conv(book)
+      @conv = Boethius.const_get(book[:converter])
+    end
+
     def make_env_for(book)
 
       # Make the book title something usable by ConTeXt
-      @title = context_friendly book[:title]
-      @conv  = Boethius.const_get(book[:converter])
+      init_book_title(book)
+      init_book_conv(book)
+      # @title = context_friendly book[:title]
+      # @conv  = Boethius.const_get(book[:converter])
 
       # Defines the nodes that will be used in the XML file.
       # Example:
@@ -111,21 +123,21 @@ module Boethius
           div = node.keys.join
           parent_node = node.values.first[:parent]
           # For anthologizing.
-          # if excerpts_specified_for?(book, level)
-          #   excerpts << <<~IN
-          #     \\startxmlsetups{xml:#{@title}:#{parent_node}}
-          #     \s\s\\xmlfilter{#1}{/#{div}[match()==#{keep book, level}]/all()}
-          #     \\stopxmlsetups
+          if excerpts_specified_for?(book, level)
+            excerpts << <<~IN
+              \\startxmlsetups{xml:#{@title}:#{parent_node}}
+              \s\s\\xmlfilter{#1}{/#{div}[match()==#{keep book, level}]/all()}
+              \\stopxmlsetups
 
-          #   IN
+            IN
 
-          #   set_head_numbers = "\\setupheadnumber[#{level}]" \
-          #                      "[\\numexpr\\xmlmatch{#1}-1\\relax]\n  "
-          #   excerpts << simple_flush(@title, div, before_text: set_head_numbers)
-          # else
-          excerpts << simple_flush(@title, parent_node)
-          excerpts << simple_flush(@title, div)
-          # end
+            set_head_numbers = "\\setupheadnumber[#{level}]" \
+                               "[\\numexpr\\xmlmatch{#1}-1\\relax]\n  "
+            excerpts << simple_flush(@title, div, before_text: set_head_numbers)
+          else
+            excerpts << simple_flush(@title, parent_node)
+            excerpts << simple_flush(@title, div)
+          end
         end
       end
     end
@@ -166,9 +178,9 @@ module Boethius
     end
 
     # Maybe do something with this later.
-    # def excerpts_specified_for?(project_item, converter_section)
-    #   project_item[:selections].keys.join.include? converter_section.to_s
-    # end
+    def excerpts_specified_for?(project_item, converter_section)
+      project_item[:selections].keys.join.include? converter_section.to_s
+    end
 
   end
 

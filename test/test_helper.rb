@@ -33,9 +33,9 @@ module DemoProject
     name: "twoxmlfile",
     project_items: [
       {
-        # selections: {
-        #   section: [1,4],
-        # },
+        selections: {
+          section: [1,4],
+        },
         font: "Palatino",
         book: {
           title: "Biography of Bob",
@@ -46,9 +46,9 @@ module DemoProject
           pubdate: 1813,
         }
       }, {
-        # selections: {
-        #   section: [1,2,4],
-        # },
+        selections: {
+          section: [1,2,4],
+        },
         font: "Gentium",
         book: {
           title: "More Simple XML",

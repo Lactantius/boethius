@@ -11,9 +11,9 @@ class RealBookTest < Minitest::Test
     name: "Pride and Prejudice",
     project_items: [
       {
-        # selections: {
-        #   section: [1,2,3,4,5],
-        # },
+        selections: {
+          section: [1,2,3,4,5],
+        },
         font: "Palatino",
         book: {
           title: "Pride and Prejudice",

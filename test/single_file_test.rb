@@ -69,7 +69,12 @@ class BoethiusTest < Minitest::Test
   IN
 
   def test_select_sections_formats_properly_for_numbered_sections
-    skip
+    # @tex.instance_variable_set(:@conv, TESTDATA1[:project_items].first[:converter])
+    # @conv = Boethius.const_get(TESTDATA1[:project_items].first[:book][:converter])
+    # @tex.stub(:conv).and_return(TESTDATA1[:project_items].first[:book][:converter])
+    book = TESTDATA1[:project_items].first[:book]
+    @tex.init_book_title(book)
+    @tex.init_book_conv(book)
     assert_equal(@tex.select_sections_from(TESTDATA1[:project_items].first),
                  TESTDATA1_SELECTIONS)
   end
